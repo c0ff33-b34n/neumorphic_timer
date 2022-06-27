@@ -7,6 +7,7 @@ class NeumorphicContainer extends StatefulWidget {
   final Offset blurOffset;
   final Color color;
   final double height;
+  final BorderRadius borderRadius;
 
   NeumorphicContainer({
     required Key? key,
@@ -14,6 +15,7 @@ class NeumorphicContainer extends StatefulWidget {
     this.bevel = 10.0,
     required this.color,
     required this.height,
+    required this.borderRadius,
   })  : this.blurOffset = Offset(bevel / 2, bevel / 2),
         super(key: key);
 
@@ -47,9 +49,9 @@ class _NeumorphicContainerState extends State<NeumorphicContainer> {
         alignment: Alignment.center,
         height: widget.height,
         duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(widget.bevel),
+          borderRadius: widget.borderRadius,
           gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -71,7 +73,7 @@ class _NeumorphicContainerState extends State<NeumorphicContainer> {
                   BoxShadow(
                     blurRadius: widget.bevel,
                     offset: -widget.blurOffset,
-                    color: color.mix(Colors.white, .6),
+                    color: Colors.white,
                   ),
                   BoxShadow(
                     blurRadius: widget.bevel,

@@ -25,12 +25,7 @@ class TimerScreen extends StatelessWidget {
                   ),
                 ),
                 Spacer(),
-                Container(
-                  width: 50.0,
-                  height: 50.0,
-                  decoration: BoxDecoration(
-                      color: Colors.green, shape: BoxShape.circle),
-                ),
+                HamburgerButton(),
               ],
             ),
             SizedBox(
@@ -59,6 +54,58 @@ class TimerScreen extends StatelessWidget {
   }
 }
 
+class HamburgerButton extends StatelessWidget {
+  const HamburgerButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return NeumorphicContainer(
+      color: Color.fromRGBO(227, 237, 247, 1),
+      borderRadius: BorderRadius.all(
+        Radius.circular(30),
+      ),
+      child: SizedBox(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            for (var i = 0; i < 3; i++)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2.5),
+                child: Container(
+                  height: 1.3,
+                  width: 20,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(1),
+                    ),
+                    boxShadow: [
+                      // Edge shadow
+                      BoxShadow(
+                        offset: Offset(-1, -1),
+                        color: Color.fromRGBO(176, 193, 209, 1),
+                        spreadRadius: 1.0,
+                      ),
+                      // Circular shadow
+                      BoxShadow(
+                        color: Colors.white,
+                        // spreadRadius: 0.5,
+                      )
+                    ],
+                  ),
+                ),
+              )
+          ],
+        ),
+      ),
+      bevel: 5.0,
+      height: 55,
+      key: key,
+    );
+  }
+}
+
 class ResetButton extends StatefulWidget {
   const ResetButton({
     Key? key,
@@ -83,8 +130,9 @@ class _ResetButtonState extends State<ResetButton> {
           ),
         ),
       ),
-      bevel: 10.5,
-      color: Color.fromRGBO(231, 240, 247, 1),
+      bevel: 5.0,
+      borderRadius: BorderRadius.circular(10.5),
+      color: Color.fromRGBO(227, 237, 247, 1),
       key: widget.key,
       height: 80.0,
     );
