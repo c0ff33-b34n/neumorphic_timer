@@ -10,13 +10,12 @@ class TimerScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 35.0),
         child: Column(
           children: [
-            SizedBox(height: MediaQuery.of(context).viewPadding.top),
-            SizedBox(height: 20),
+            SizedBox(height: MediaQuery.of(context).viewPadding.top + 20),
             Row(
               children: [
                 Text(
                   'Timer',
-                  style: GoogleFonts.roboto(
+                  style: GoogleFonts.dmSans(
                     textStyle: TextStyle(
                       fontSize: 43,
                       fontWeight: FontWeight.w900,
