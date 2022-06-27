@@ -6,12 +6,14 @@ class NeumorphicContainer extends StatefulWidget {
   final double bevel;
   final Offset blurOffset;
   final Color color;
+  final double height;
 
   NeumorphicContainer({
-    required Key key,
+    required Key? key,
     required this.child,
     this.bevel = 10.0,
     required this.color,
+    required this.height,
   })  : this.blurOffset = Offset(bevel / 2, bevel / 2),
         super(key: key);
 
@@ -36,16 +38,18 @@ class _NeumorphicContainerState extends State<NeumorphicContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final color = this.widget.color ?? Theme.of(context).backgroundColor;
+    final color = this.widget.color;
 
     return Listener(
       onPointerDown: _onPointerDown,
       onPointerUp: _onPointerUp,
       child: AnimatedContainer(
+        alignment: Alignment.center,
+        height: widget.height,
         duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.all(24.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(widget.bevel * 10),
+          borderRadius: BorderRadius.circular(widget.bevel),
           gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,

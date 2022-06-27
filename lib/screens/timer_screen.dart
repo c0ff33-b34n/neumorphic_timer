@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:neumorphic_timer/UI/neumorphic_container.dart';
 
 class TimerScreen extends StatelessWidget {
   @override
@@ -50,13 +51,42 @@ class TimerScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 25.0),
-            Container(
-              height: 73.0,
-              color: Colors.green,
-            ),
+            ResetButton(),
           ],
         ),
       ),
+    );
+  }
+}
+
+class ResetButton extends StatefulWidget {
+  const ResetButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<ResetButton> createState() => _ResetButtonState();
+}
+
+class _ResetButtonState extends State<ResetButton> {
+  @override
+  Widget build(BuildContext context) {
+    return NeumorphicContainer(
+      child: Text(
+        'Reset',
+        textAlign: TextAlign.center,
+        style: GoogleFonts.dmSans(
+          textStyle: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.w700,
+            color: Color.fromRGBO(49, 68, 105, 1),
+          ),
+        ),
+      ),
+      bevel: 10.5,
+      color: Color.fromRGBO(231, 240, 247, 1),
+      key: widget.key,
+      height: 80.0,
     );
   }
 }
