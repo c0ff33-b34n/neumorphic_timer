@@ -32,7 +32,29 @@ class TimerScreen extends StatelessWidget {
                       color: Colors.green, shape: BoxShape.circle),
                 ),
               ],
-            )
+            ),
+            SizedBox(
+              height: 40.0,
+            ),
+            Container(
+              height: 145.0,
+              color: Colors.green,
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Container(
+              height: 300.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.green,
+              ),
+            ),
+            SizedBox(height: 25.0),
+            Container(
+              height: 73.0,
+              color: Colors.green,
+            ),
           ],
         ),
       ),
