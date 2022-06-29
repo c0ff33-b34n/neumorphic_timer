@@ -31,10 +31,7 @@ class TimerScreen extends StatelessWidget {
             SizedBox(
               height: 40.0,
             ),
-            Container(
-              height: 145.0,
-              color: Colors.green,
-            ),
+            DigitalClock(),
             SizedBox(
               height: 20.0,
             ),
@@ -49,6 +46,56 @@ class TimerScreen extends StatelessWidget {
             SizedBox(height: 25.0),
             ResetButton(),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class DigitalClock extends StatelessWidget {
+  const DigitalClock({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 145.0,
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(217, 230, 243, 1),
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.white,
+            offset: Offset(-10, -10),
+            blurRadius: 15,
+          ),
+          BoxShadow(
+            color: Color.fromRGBO(214, 223, 230, 1),
+            offset: Offset(10, 10),
+            blurRadius: 15,
+          ),
+        ],
+      ),
+      child: Center(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Container(
+              height: constraints.maxHeight * 0.87,
+              width: constraints.maxWidth * 0.95,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  Color.fromRGBO(203, 211, 196, 1),
+                  Color.fromRGBO(176, 188, 163, 1),
+                ]),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: Color.fromRGBO(168, 168, 168, 1),
+                  width: 2,
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
