@@ -1,53 +1,62 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:neumorphic_timer/UI/neumorphic_container.dart';
+import 'package:provider/provider.dart';
 import '../UI/digital_colon.dart';
 import '../UI/digital_number.dart';
+import '../UI/neumorphic_playbutton.dart';
+import '../UI/neumorphic_resetbutton.dart';
 
 class TimerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Color.fromRGBO(231, 240, 247, 1),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 35.0),
-        child: Column(
-          children: [
-            SizedBox(height: MediaQuery.of(context).viewPadding.top + 20),
-            Row(
-              children: [
-                Text(
-                  'Timer',
-                  style: GoogleFonts.dmSans(
-                    textStyle: TextStyle(
-                      fontSize: 43,
-                      fontWeight: FontWeight.w900,
-                      color: Color.fromRGBO(49, 68, 105, 1),
+    final timerService = TimerService();
+    return ChangeNotifierProvider<TimerService>(
+      create: (_) => timerService,
+      child: Material(
+        color: Color.fromRGBO(231, 240, 247, 1),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 35.0),
+          child: Column(
+            children: [
+              SizedBox(height: MediaQuery.of(context).viewPadding.top + 20),
+              Row(
+                children: [
+                  Text(
+                    'Timer',
+                    style: GoogleFonts.dmSans(
+                      textStyle: TextStyle(
+                        fontSize: 43,
+                        fontWeight: FontWeight.w900,
+                        color: Color.fromRGBO(49, 68, 105, 1),
+                      ),
                     ),
                   ),
-                ),
-                Spacer(),
-                HamburgerButton(),
-              ],
-            ),
-            SizedBox(
-              height: 40.0,
-            ),
-            DigitalClock(),
-            SizedBox(
-              height: 20.0,
-            ),
-            Container(
-              height: 300.0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.green,
+                  Spacer(),
+                  HamburgerButton(),
+                ],
               ),
-              child: PlayButton(),
-            ),
-            SizedBox(height: 25.0),
-            ResetButton(),
-          ],
+              SizedBox(
+                height: 40.0,
+              ),
+              DigitalClock(),
+              SizedBox(
+                height: 20.0,
+              ),
+              Container(
+                height: 300.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.green,
+                ),
+                child: NeumorphicPlayButton(),
+              ),
+              SizedBox(height: 25.0),
+              NeumorphicResetButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -119,9 +128,10 @@ class DigitalNumbers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final duration = Provider.of<TimerService>(context).currentDuration;
     final hours = createNumberTime(0);
-    final minutes = createNumberTime(59);
-    final seconds = createNumberTime(26);
+    final minutes = createNumberTime(0);
+    final seconds = createNumberTime(duration.inSeconds);
     return Center(
       child: Container(
         height: maxHeight * 0.5,
@@ -191,31 +201,6 @@ class DigitalNumberWithBg extends StatelessWidget {
   }
 }
 
-class PlayButton extends StatelessWidget {
-  const PlayButton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return NeumorphicContainer(
-      key: key,
-      child: Center(
-        child: Icon(
-          Icons.play_arrow,
-          size: 60,
-          color: Colors.greenAccent.shade400,
-        ),
-      ),
-      bevel: 5.0,
-      borderRadius: null,
-      boxShape: BoxShape.circle,
-      color: Color.fromRGBO(227, 237, 247, 1),
-      height: 1.0,
-    );
-  }
-}
-
 class HamburgerButton extends StatelessWidget {
   const HamburgerButton({
     Key? key,
@@ -268,35 +253,33 @@ class HamburgerButton extends StatelessWidget {
   }
 }
 
-class ResetButton extends StatefulWidget {
-  const ResetButton({
-    Key? key,
-  }) : super(key: key);
+class TimerService extends ChangeNotifier {
+  Stopwatch _watch = Stopwatch();
+  Duration _currentDuration = Duration.zero;
+  Timer? _timer;
+  Duration get currentDuration => _currentDuration;
+
+  void start() {
+    _watch.start();
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _currentDuration = _watch.elapsed;
+      notifyListeners();
+    });
+
+    notifyListeners();
+  }
+
+  void reset() {
+    _watch.stop();
+    _watch.reset();
+    _timer?.cancel();
+    _currentDuration = Duration.zero;
+    notifyListeners();
+  }
 
   @override
-  State<ResetButton> createState() => _ResetButtonState();
-}
-
-class _ResetButtonState extends State<ResetButton> {
-  @override
-  Widget build(BuildContext context) {
-    return NeumorphicContainer(
-      child: Text(
-        'Reset',
-        textAlign: TextAlign.center,
-        style: GoogleFonts.dmSans(
-          textStyle: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-            color: Color.fromRGBO(49, 68, 105, 1),
-          ),
-        ),
-      ),
-      bevel: 5.0,
-      borderRadius: BorderRadius.circular(10.5),
-      color: Color.fromRGBO(227, 237, 247, 1),
-      key: widget.key,
-      height: 80.0,
-    );
+  void notifyListeners() {
+    // TODO: implement notifyListeners
+    super.notifyListeners();
   }
 }
