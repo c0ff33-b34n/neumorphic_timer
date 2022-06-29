@@ -44,12 +44,38 @@ class TimerScreen extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: Colors.green,
               ),
+              child: PlayButton(),
             ),
             SizedBox(height: 25.0),
             ResetButton(),
           ],
         ),
       ),
+    );
+  }
+}
+
+class PlayButton extends StatelessWidget {
+  const PlayButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return NeumorphicContainer(
+      key: key,
+      child: Center(
+        child: Icon(
+          Icons.play_arrow,
+          size: 60,
+          color: Colors.greenAccent.shade400,
+        ),
+      ),
+      bevel: 5.0,
+      borderRadius: null,
+      boxShape: BoxShape.circle,
+      color: Color.fromRGBO(227, 237, 247, 1),
+      height: 1.0,
     );
   }
 }
