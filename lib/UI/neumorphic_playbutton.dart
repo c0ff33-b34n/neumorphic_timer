@@ -11,13 +11,6 @@ class NeumorphicPlayButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return NeumorphicPlayContainer(
       key: key,
-      child: Center(
-        child: Icon(
-          Icons.play_arrow,
-          size: 60,
-          color: Colors.greenAccent.shade400,
-        ),
-      ),
       bevel: 5.0,
       borderRadius: null,
       boxShape: BoxShape.circle,
@@ -28,7 +21,6 @@ class NeumorphicPlayButton extends StatelessWidget {
 }
 
 class NeumorphicPlayContainer extends StatefulWidget {
-  final Widget child;
   final double bevel;
   final Offset blurOffset;
   final Color color;
@@ -38,7 +30,6 @@ class NeumorphicPlayContainer extends StatefulWidget {
 
   NeumorphicPlayContainer(
       {required Key? key,
-      required this.child,
       this.bevel = 10.0,
       required this.color,
       required this.height,
@@ -69,10 +60,11 @@ class _NeumorphicContainerState extends State<NeumorphicPlayContainer> {
   @override
   Widget build(BuildContext context) {
     final color = this.widget.color;
-
+    final timerService = Provider.of<TimerService>(context, listen: true);
     return Listener(
       onPointerDown: (e) {
-        Provider.of<TimerService>(context, listen: false).start();
+        timerService.isRunning ? timerService.stop() : timerService.start();
+
         _onPointerDown(e);
       },
       onPointerUp: _onPointerUp,
@@ -114,7 +106,15 @@ class _NeumorphicContainerState extends State<NeumorphicPlayContainer> {
                   )
                 ],
         ),
-        child: widget.child,
+        child: Center(
+          child: Icon(
+            timerService.isRunning ? Icons.pause : Icons.play_arrow,
+            size: 60,
+            color: timerService.isRunning
+                ? Colors.red
+                : Colors.greenAccent.shade400,
+          ),
+        ),
       ),
     );
   }

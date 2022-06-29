@@ -129,9 +129,9 @@ class DigitalNumbers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final duration = Provider.of<TimerService>(context).currentDuration;
-    final hours = createNumberTime(0);
-    final minutes = createNumberTime(0);
-    final seconds = createNumberTime(duration.inSeconds);
+    final hours = createNumberTime(duration.inHours % 99);
+    final minutes = createNumberTime(duration.inMinutes % 60);
+    final seconds = createNumberTime(duration.inSeconds % 60);
     return Center(
       child: Container(
         height: maxHeight * 0.5,
@@ -258,7 +258,7 @@ class TimerService extends ChangeNotifier {
   Duration _currentDuration = Duration.zero;
   Timer? _timer;
   Duration get currentDuration => _currentDuration;
-
+  bool get isRunning => _watch.isRunning;
   void start() {
     _watch.start();
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -266,6 +266,12 @@ class TimerService extends ChangeNotifier {
       notifyListeners();
     });
 
+    notifyListeners();
+  }
+
+  void stop() {
+    _watch.stop();
+    _currentDuration = _watch.elapsed;
     notifyListeners();
   }
 
@@ -279,7 +285,6 @@ class TimerService extends ChangeNotifier {
 
   @override
   void notifyListeners() {
-    // TODO: implement notifyListeners
     super.notifyListeners();
   }
 }
