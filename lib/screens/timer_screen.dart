@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:neumorphic_timer/UI/neumorphic_container.dart';
+import '../UI/digital_colon.dart';
+import '../UI/digital_number.dart';
 
 class TimerScreen extends StatelessWidget {
   @override
@@ -80,9 +82,11 @@ class DigitalClock extends StatelessWidget {
       child: Center(
         child: LayoutBuilder(
           builder: (context, constraints) {
+            final maxHeight = constraints.maxHeight;
+            final maxWidth = constraints.maxWidth;
             return Container(
-              height: constraints.maxHeight * 0.87,
-              width: constraints.maxWidth * 0.95,
+              height: maxHeight * 0.87,
+              width: maxWidth * 0.95,
               decoration: BoxDecoration(
                 gradient: LinearGradient(colors: [
                   Color.fromRGBO(203, 211, 196, 1),
@@ -94,10 +98,95 @@ class DigitalClock extends StatelessWidget {
                   width: 2,
                 ),
               ),
+              child: DigitalNumbers(maxHeight: maxHeight, maxWidth: maxWidth),
             );
           },
         ),
       ),
+    );
+  }
+}
+
+class DigitalNumbers extends StatelessWidget {
+  const DigitalNumbers({
+    Key? key,
+    required this.maxHeight,
+    required this.maxWidth,
+  }) : super(key: key);
+
+  final double maxHeight;
+  final double maxWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    final hours = createNumberTime(0);
+    final minutes = createNumberTime(59);
+    final seconds = createNumberTime(26);
+    return Center(
+      child: Container(
+        height: maxHeight * 0.5,
+        width: maxWidth * 0.7,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ...hours,
+            DigitalColon(
+              height: maxHeight * 0.3,
+              color: Colors.black87,
+            ),
+            ...minutes,
+            DigitalColon(
+              height: maxHeight * 0.3,
+              color: Colors.black87,
+            ),
+            ...seconds,
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<DigitalNumberWithBg> createNumberTime(int numberTime) {
+    final isNumberTwoDigits = numberTime.toString().length == 2;
+    final int firstDigit =
+        isNumberTwoDigits ? int.parse(numberTime.toString()[0]) : 0;
+    final int secondDigit =
+        isNumberTwoDigits ? int.parse(numberTime.toString()[1]) : numberTime;
+    return [
+      DigitalNumberWithBg(
+        maxHeight: maxHeight,
+        value: isNumberTwoDigits ? firstDigit : 0,
+      ),
+      DigitalNumberWithBg(
+        maxHeight: maxHeight,
+        value: secondDigit,
+      ),
+    ];
+  }
+}
+
+/// Bg stands for background
+class DigitalNumberWithBg extends StatelessWidget {
+  const DigitalNumberWithBg({
+    Key? key,
+    required this.maxHeight,
+    required this.value,
+  }) : super(key: key);
+
+  final double maxHeight;
+  final int value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        DigitalNumber(
+          value: value,
+          height: maxHeight * 0.3,
+          color: Colors.black,
+        ),
+        DigitalNumber(value: 8, height: maxHeight * 0.3, color: Colors.black12),
+      ],
     );
   }
 }
